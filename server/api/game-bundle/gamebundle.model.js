@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var GamerepoSchema = new Schema({
+var GamebundleSchema = new Schema({
     gamelist    : Array,			// ['tome radider', 'resident evil', 'descriction derby']
     redemptions : Array,			// [{ key, status}, { key, status }]
     merchant    : String,			
@@ -13,4 +13,4 @@ var GamerepoSchema = new Schema({
     generated	: Number
 });
 
-module.exports = mongoose.model('gambundle', GamerepoSchema);
+module.exports = mongoose.model('gamebundle', GamebundleSchema);
