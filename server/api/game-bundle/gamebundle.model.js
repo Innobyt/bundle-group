@@ -4,8 +4,8 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var GamerepoSchema = new Schema({
-    gamelist    : [String],			// ['tome radider', 'resident evil', 'descriction derby']
-    redemptions : [Object],			// [{ key, status}, { key, status }]
+    gamelist    : Array,			// ['tome radider', 'resident evil', 'descriction derby']
+    redemptions : Array,			// [{ key, status}, { key, status }]
     merchant    : String,			
     bundlename  : String,
     threshold	: Number,
