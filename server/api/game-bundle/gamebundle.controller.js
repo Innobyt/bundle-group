@@ -3,7 +3,6 @@
 var gamebundle = require('./gamebundle.model');
 var http = require('http');
 
-// gamerepo ajax object
 var gamerepo = {
 
 	post : {
