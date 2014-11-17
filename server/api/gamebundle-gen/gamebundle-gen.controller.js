@@ -2,6 +2,10 @@
 
 var rs = require('random-strings');
 
+// Initialise Game Bundle Key Creation with Prefix + 20 Random Letters.
+// Using Example: generate(100, "MERCH")
+// Result for each Game Bundle Key: MERCH-XXXXX-XXXXX-XXXXX-XXXXX
+
 // Generate a Game Bundle Key.
 exports.create = generate(num, prefix){
 	var redeemkey = "";
