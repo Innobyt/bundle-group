@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
+
+/* Uses Random Strings JS. */
 var rs = require('random-strings');
 
 /* GET home page. */
 router.get('/', function(req, res) {
 
+/* Styling Prefix with Redemption Codes. */
 function randString(x, prefix){
 var m = prefix + "-";
 var c = rs.human(20);
@@ -18,6 +21,7 @@ redemption.push(merge);
 return redemption;
 }
 
+/* Generate Redemption Codes. */
 function generate(num, prefix){
 var redeemkey = "";
 for (var i = 0; i < num; i++)
@@ -27,6 +31,7 @@ redeemkey += randString(20, prefix) + "\n";
 return redeemkey;
 }
 
+/* Initialising. */
 var redeemcode = generate(100, "INNOB");
 
   res.render('index', { title: 'Express', result: redeemcode });
