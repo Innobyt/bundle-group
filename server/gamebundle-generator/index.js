@@ -15,7 +15,6 @@ var sym = c.replace(/(.{5})/g,"$1-");
 var trim = sym.slice(0,-1);
 var merge = m + trim;
 return merge;
-
 /* Push to Redemption Array. */
 for(var i = 0, redemption = [], string = ''; i < n; i++){
 redemption.push(merge);
