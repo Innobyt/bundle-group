@@ -56,7 +56,7 @@ exports.create = function(req, res) {
         if(err) return handleError(res,err);
 
         // handle found
-        if(found) return handleError(res,{message: ' duplicate entry found'})
+        if(found) return handleError(res,{message: ' duplicate entry found'});
         
         // create gamerepoth document, handle error || create gamerepo document
         gamerepo.post.does_gametitles_exist(req.body, function(err, result){
@@ -117,11 +117,7 @@ exports.show = function(req, res) {
 // update add gamebundle redemotion key
 exports.update = function(req, res) {
 
-	console.log(req.params.id);
-
     var update_entries = parse_form_update_gamebundle(req.body);
-
-    console.log(update_entries);
 
     // create a query
     var query_findOne = {
@@ -201,6 +197,56 @@ exports.destroy = function(req,res){
 
 		});
 	});
+ };
+
+// redemption gamebundle redemptionkey, handle error || success response and dispatch email, to admin
+exports.redemption = function(req, res) {
+
+    gamebundle.findOne({ redemptions.key: req.body.redemptionkey /*, redemptions.status : true */ }, function(err, found){
+        
+        // handle error
+        if(err) return handleError(res,err);
+
+        // handle found
+        if(!found) return handleError(res,{message: ' redemption code is not avaliable or has been claimed'});
+        
+        // as requested, for each gamelist
+        var gamelist = found.gamelist;
+        while(gamelist.length){
+
+        	// post gametitle to game-repo per title
+        	gamerepo.post.redemption(gamelist.pop(), function(err,doc){
+		        
+		        // handle error
+		        if(err) return handleError(res,err);
+
+		        // handle found
+		        if(!found) return handleError(res,{message: ' no avaliable game-repo gamekeys'});
+
+		        
+        	});
+
+        };
+
+        // create gamerepoth document, handle error || create gamerepo document
+        gamerepo.post.redemption(req.body, function(err, result){
+
+        	// handle error
+        	if(err) return handleError(res,{message: ' error'});
+
+        	// handle not found
+        	if (!result) return handleError(res,{message: ' could not find gametitles'})
+
+        	// handle found
+        	var gamebundle_created = parse_form_gamebundle(req.body);
+        	gamebundle.create(gamebundle_created, function(err, doc){
+        		
+				return err ? handleError(res,err) : res.json(201, { // handle err, else handle success
+					gamebundle : gamebundle_created // return successful data from gamebundle
+				});
+			});
+        });
+    });
  };
 
 function handleError(res, err) {
