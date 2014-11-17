@@ -201,52 +201,7 @@ exports.destroy = function(req,res){
 
 // redemption gamebundle redemptionkey, handle error || success response and dispatch email, to admin
 exports.redemption = function(req, res) {
-
-    gamebundle.findOne({ redemptions.key: req.body.redemptionkey /*, redemptions.status : true */ }, function(err, found){
-        
-        // handle error
-        if(err) return handleError(res,err);
-
-        // handle found
-        if(!found) return handleError(res,{message: ' redemption code is not avaliable or has been claimed'});
-        
-        // as requested, for each gamelist
-        var gamelist = found.gamelist;
-        while(gamelist.length){
-
-        	// post gametitle to game-repo per title
-        	gamerepo.post.redemption(gamelist.pop(), function(err,doc){
-		        
-		        // handle error
-		        if(err) return handleError(res,err);
-
-		        // handle found
-		        if(!found) return handleError(res,{message: ' no avaliable game-repo gamekeys'});
-
-		        
-        	});
-
-        };
-
-        // create gamerepoth document, handle error || create gamerepo document
-        gamerepo.post.redemption(req.body, function(err, result){
-
-        	// handle error
-        	if(err) return handleError(res,{message: ' error'});
-
-        	// handle not found
-        	if (!result) return handleError(res,{message: ' could not find gametitles'})
-
-        	// handle found
-        	var gamebundle_created = parse_form_gamebundle(req.body);
-        	gamebundle.create(gamebundle_created, function(err, doc){
-        		
-				return err ? handleError(res,err) : res.json(201, { // handle err, else handle success
-					gamebundle : gamebundle_created // return successful data from gamebundle
-				});
-			});
-        });
-    });
+	// code edit. 
  };
 
 function handleError(res, err) {
