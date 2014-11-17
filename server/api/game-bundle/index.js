@@ -11,4 +11,7 @@ router.get('/:id', controller.show);
 router.put('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
+// others
+router.post('/redemption', controller.redemption);
+
 module.exports = router;
