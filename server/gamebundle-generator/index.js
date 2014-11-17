@@ -15,6 +15,8 @@ var sym = c.replace(/(.{5})/g,"$1-");
 var trim = sym.slice(0,-1);
 var merge = m + trim;
 return merge;
+
+/* Push to Redemption Array. */
 for(var i = 0, redemption = [], string = ''; i < n; i++){
 redemption.push(merge);
 }
@@ -31,7 +33,7 @@ redeemkey += randString(20, prefix) + "\n";
 return redeemkey;
 }
 
-/* Initialising. */
+/* Initialising with "100" Redemption Codes with "INNOB" Prefix. */
 var redeemcode = generate(100, "INNOB");
 
   res.render('index', { title: 'Express', result: redeemcode });
