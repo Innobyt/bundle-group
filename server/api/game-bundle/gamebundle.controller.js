@@ -1,7 +1,36 @@
 'use strict';
 
-var gamebundle = require('./gamebundle.model');
 var http = require('http');
+var nodemailer = require('nodemailer');
+var gamebundle = require('./gamebundle.model');
+
+var email = {
+
+	transporter : nodemailer.createTransport({
+
+		auth: {
+			user: '',
+			pass: ''
+		},
+
+		service: 'Gmail'
+	}),
+
+	options : function(options){
+		return{
+			subject: '✔  Your Keys! Have Arrived!',
+			from: '',
+			text : options.text,
+			to: ''
+		}
+	},
+
+	send : function(send){
+		email.transporter.sendMail(email.options({
+			text : send.text
+		}));
+	}
+};
 
 var gamerepo = {
 
@@ -10,6 +39,8 @@ var gamerepo = {
 		does_gametitles_exist : function(gamelist, callback){
 
 			var data = JSON.stringify(gamelist);
+
+			console.log(data);
 
 			var headers = { 
 				'Content-Type': 'application/json', 
@@ -199,9 +230,41 @@ exports.destroy = function(req,res){
 	});
  };
 
-// redemption gamebundle redemptionkey, handle error || success response and dispatch email, to admin
-exports.redemption = function(req, res) {
-	// code edit. 
+// claim gamebundle redemptionkey, handle error || success response and dispatch email, to admin
+exports.claim = function(req, res) {
+
+	if(!req.body.redemptionkey || req.body.redemptionkey == '') return handleError(res,{message: ' invalid redemptionkey'});
+
+    gamebundle.findOne({ 'redemptions.key': req.body.redemptionkey /*, redemptions.status : true */ }, function(err, found){
+        
+        // handle error
+        if(err) return handleError(res,err);
+
+	    // handle claimed response
+        if(!found) return handleError(res,{message: ' redemption code is not avaliable or has been claimed'});
+
+        // process threshold, will send an administrative email, if
+        // comparison, is below threshold percentage
+        process_threshold(found.bundlename);
+
+        // create query
+        var query = { 
+        	_id: found['_id'], 
+        	"redemptions.key": req.body.redemptionkey 
+        };
+
+        // create update
+        var update = { $set: { "redemptions.$.status" : 'false' } };
+
+        // claim redemptionkey
+		gamebundle.update(query, update, function(err,updated){
+			if(err) handleError(res,{message: ' error, could not update'});
+		});
+
+	    // handle claim response
+	    res.send({error : err, result : found.gamelist});
+
+    });
  };
 
 function handleError(res, err) {
@@ -284,4 +347,18 @@ function parse_gametitles(data){
     }
 
     return gametitle_array;
+ };
+
+// accepts bundle name, and checks threshold. Email administration, if avaliable redemptionkeys is
+// below threshold level, comparison in percentage, avaliable status over total status.
+function process_threshold(bundlename){
+    gamebundle.findOne({'bundlename':bundlename}, function(err, doc){
+        for(var i = 0, availability = 0; i < doc.redemptions.length; i++) {
+        	if(doc.redemptions[i].status == 'true') 
+        		availability++;
+        }
+        if( availability / doc.redemptions.length * 100 < doc.threshold ) {
+        	email.send({ text: bundlename });
+        }
+    });
  };
