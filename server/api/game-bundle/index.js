@@ -12,6 +12,6 @@ router.put('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
 // others
-router.post('/redemption', controller.redemption);
+router.post('/claim', controller.claim);
 
 module.exports = router;
