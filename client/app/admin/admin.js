@@ -5,7 +5,7 @@ angular.module('gamebundleApp')
     $stateProvider
       .state('admin', {
         url: '/admin',
-        templateUrl: 'app/admin/admin.html',
+        templateUrl: 'app/admin/dashboard.html',
         controller: 'AdminCtrl'
       });
   });
