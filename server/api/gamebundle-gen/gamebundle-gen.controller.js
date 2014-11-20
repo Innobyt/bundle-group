@@ -7,13 +7,12 @@ var rs = require('random-strings');
 // Result for each Game Bundle Key: MERCH-XXXXX-XXXXX-XXXXX-XXXXX
 
 // Generate a Game Bundle Key.
-exports.create = generate(num, prefix){
+exports.create = function(num, prefix){
 	var redeemkey = "";
 	for (var i = 0; i < num; i++){
 		redeemkey += randString(20, prefix) + "\n";
 		}
 		return redeemkey;
-	}
 };
 
 /* Styling Prefix with Redemption Key. */

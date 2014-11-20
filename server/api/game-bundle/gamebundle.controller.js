@@ -3,6 +3,7 @@
 var http = require('http');
 var nodemailer = require('nodemailer');
 var gamebundle = require('./gamebundle.model');
+var gen = require('../gamebundle-gen/gamebundle-gen.controller');
 
 var email = {
 
@@ -22,6 +23,7 @@ var email = {
 			from: '',
 			text : options.text,
 			to: ''
+
 		}
 	},
 
@@ -233,8 +235,6 @@ exports.destroy = function(req,res){
 // claim gamebundle redemptionkey, handle error || success response and dispatch email, to admin
 exports.claim = function(req, res) {
 
-	if(!req.body.redemptionkey || req.body.redemptionkey == '') return handleError(res,{message: ' invalid redemptionkey'});
-
     gamebundle.findOne({ 'redemptions.key': req.body.redemptionkey /*, redemptions.status : true */ }, function(err, found){
         
         // handle error
@@ -276,8 +276,15 @@ function parse_form_gamebundle(args){
 
 	var save = args;
 	var redemptions = [];
+
+	// create redemptionkeys
+	var redemptionkeys = gen.create(args.count, 'INNO');
+
+	// convert to array
+    redemptionkeys = parse_multiformat_redemptionkeys(redemptionkeys);
+
 	for(var i = 0; i < args.count; i++) {
-		redemptions.push( { status : true, key : '' } );
+		redemptions.push( { status : true, key : redemptionkeys[i] } );
 	}
 
 	// override string of gamelist, and convert to array of gamelist
