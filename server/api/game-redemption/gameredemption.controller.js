@@ -10,8 +10,13 @@ var email = {
 	transporter : nodemailer.createTransport({
 
 		auth: {
+<<<<<<< HEAD
 			user: '',
 			pass: ''
+=======
+			user: 'kyle@innobyt.com',
+			pass: 'kyle1234'
+>>>>>>> init_angular_service
 		},
 
 		service: 'Gmail'
@@ -20,7 +25,11 @@ var email = {
 	options : function(options){
 		return{
 			subject: '✔  Your Keys! Have Arrived!',
+<<<<<<< HEAD
 			from: '',
+=======
+			from: 'kyle ✔ <kyle@innobyt.com>',
+>>>>>>> init_angular_service
 			text : options.text,
 			to: options.to
 		}

@@ -23,7 +23,6 @@ var email = {
 			from: '',
 			text : options.text,
 			to: ''
-
 		}
 	},
 

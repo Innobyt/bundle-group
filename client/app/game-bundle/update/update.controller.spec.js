@@ -1,16 +1,16 @@
 'use strict';
 
-describe('Controller: GameBundleCtrl', function () {
+describe('Controller: UpdateCtrl', function () {
 
   // load the controller's module
   beforeEach(module('gamebundleApp'));
 
-  var GameBundleCtrl, scope;
+  var UpdateCtrl, scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    GameBundleCtrl = $controller('GameBundleCtrl', {
+    UpdateCtrl = $controller('UpdateCtrl', {
       $scope: scope
     });
   }));
