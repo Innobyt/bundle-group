@@ -22,7 +22,7 @@ var email = {
 			subject: '✔  Your Keys! Have Arrived!',
 			from: '',
 			text : options.text,
-			to: ''
+			to: options.to
 		}
 	},
 
@@ -277,7 +277,7 @@ function parse_form_gamebundle(args){
 	var redemptions = [];
 
 	// create redemptionkeys
-	var redemptionkeys = gen.create(args.count, 'INNO');
+	var redemptionkeys = gen.create(args.count, args.merchant_prefix);
 
 	// convert to array
     redemptionkeys = parse_multiformat_redemptionkeys(redemptionkeys);

@@ -6,7 +6,8 @@ var mongoose = require('mongoose'),
 var GamebundleSchema = new Schema({
     gamelist    : Array,			// ['tome radider', 'resident evil', 'descriction derby']
     redemptions : Array,			// [{ key, status}, { key, status }]
-    merchant    : String,			
+    merchant    : String,
+    merchant_prefix    : String,	// new merchant prefix
     bundlename  : String,
     threshold	: Number,
     count		: Number,

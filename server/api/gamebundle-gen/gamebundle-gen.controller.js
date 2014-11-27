@@ -28,11 +28,7 @@ var sym = c.replace(/(.{5})/g,"$1-");
 var trim = sym.slice(0,-1);
 // Merge prefix to the above result, result: MERCH-XXXXX-XXXXX-XXXXX-XXXXX
 var merge = m + trim;
-/* Push to Redemption Array. */
-for(var i = 0, redemption = [], string = ''; i < n; i++){
-redemption.push(merge);
-}
 // Display final result, result: MERCH-XXXXX-XXXXX-XXXXX-XXXXX as an array (redemption Array)
-return redemption;
+return merge;
 }
 
