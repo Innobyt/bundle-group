@@ -42,6 +42,11 @@ angular.module('gameRedemptionApp', ['ngTable', 'ngTableExport'])
              $defer.resolve($scope.gameredemption);
          }
      });*/
+	 
+		// post, gameRedemption creation ('C' in Crud)
+		$scope.submit = function() {
+			$scope.formData.$save(function(){ $scope.initialize(); });
+		 };
 
 		// initialize gameRedemption controller and services
 		$scope.initialize = function(){
