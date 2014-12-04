@@ -34,7 +34,9 @@
           <label> threshold   </label> <input type="text" class="form-control input-lg" ng-model="add_redemptionkeys.threshold" value="{{add_redemptionkeys.threshold}}" disabled>
           <label> count     </label> <input type="text" class="form-control input-lg" ng-model="add_redemptionkeys.count" value="{{add_redemptionkeys.count}}" disabled>
           <label> generated   </label> <input type="text" class="form-control input-lg" ng-model="add_redemptionkeys.generated" value="{{add_redemptionkeys.generated}}" disabled>
-          <label> add redemption-keys (status will be set accordingly): </label> <textarea class="form-control input-lg" ng-model="add_redemptionkeys.redemptionkeys"></textarea>
+          <label> add redemption-keys: </label> <input type="text" class="form-control input-lg" ng-model="add_redemptionkeys.redemptionkeys">
+          <label> merchant prefix</label> <input type="text" id="merchant_prefix" class="form-control input-lg" ng-model="add_redemptionkeys.merchant_prefix">
+
         </form>
         <button type="submit" class="btn btn-primary btn-lg" ng-click="update()">Update</button>
       </div>

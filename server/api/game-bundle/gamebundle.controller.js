@@ -41,8 +41,6 @@ var gamerepo = {
 
 			var data = JSON.stringify(gamelist);
 
-			console.log(data);
-
 			var headers = { 
 				'Content-Type': 'application/json', 
 				'Content-Length': data.length 
@@ -146,7 +144,7 @@ exports.show = function(req, res) {
 	});
  };
 
-// update add gamebundle redemotion key
+// update add gamebundle redemption key
 exports.update = function(req, res) {
 
     var update_entries = parse_form_update_gamebundle(req.body);
@@ -277,10 +275,10 @@ function parse_form_gamebundle(args){
 	var redemptions = [];
 
 	// create redemptionkeys
-	var redemptionkeys = gen.create(args.count, args.merchant_prefix);
-
-	// convert to array
-    redemptionkeys = parse_multiformat_redemptionkeys(redemptionkeys);
+	var redemptionkeys = create_redemptionkeys({
+		prefix : args.merchant_prefix,
+		make : args.count
+	});
 
 	for(var i = 0; i < args.count; i++) {
 		redemptions.push( { status : true, key : redemptionkeys[i] } );
@@ -301,8 +299,11 @@ function parse_form_gamebundle(args){
 // returns an array of entries
 function parse_form_update_gamebundle(args){
 
-	// parse redemption keys as an array
-    var redemptionkeys = parse_multiformat_redemptionkeys(args.redemptionkeys);
+	// create redemptionkeys
+	var redemptionkeys = create_redemptionkeys({
+		prefix : args.merchant_prefix,
+		make : args.redemptionkeys
+	});
 
     // create a save
 	var save = args;
@@ -368,3 +369,16 @@ function process_threshold(bundlename){
         }
     });
  };
+
+// create redemptionkeys, encapuslating gen.create, accepts args.make and args.prefix where 
+// make, is the number of times to make a redemptionkey and prefix default string requirement
+function create_redemptionkeys(args){
+
+    // create redemptionkeys
+	var redemptionkeys = gen.create(args.make, args.prefix);
+
+	// convert to array
+    redemptionkeys = parse_multiformat_redemptionkeys(redemptionkeys);
+
+    return redemptionkeys;
+}

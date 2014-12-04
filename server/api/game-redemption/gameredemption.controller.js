@@ -27,6 +27,7 @@ var email = {
 	},
 
 	send : function(send){
+
 		email.transporter.sendMail(email.options({
 			text : send.text,
 			to: send.to
