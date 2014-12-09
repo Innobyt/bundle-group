@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-	    .module('gameRedemptionApp')
-	    .factory('gameRedemption', ['$resource', gameRedemptionApp]);
+	    .module('gamebundleApp')
+	    .factory('gameRedemption', ['$resource', gameRedemption]);
 
 	function gameRedemption($resource) {
 		return $resource('/api/game-redemption/:id', {}, {
