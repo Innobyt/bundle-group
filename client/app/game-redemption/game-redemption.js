@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('gameRedemptionApp')
+angular.module('gamebundleApp')
   .config(function ($stateProvider) {
     $stateProvider
       .state('game-redemption-redeem', {
