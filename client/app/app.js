@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('gamebundleApp', [
+  'ngTable',
   'ngCookies',
   'ngResource',
   'ngSanitize',
