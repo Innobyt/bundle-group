@@ -5,7 +5,7 @@ angular.module('gameRedemptionApp', ['ngTable', 'ngTableExport'])
   
   // GameRedemptionCtrl requires R output, 
   // 'R' as in retrieve
-  function ($scope, gameRedemption) {
+  function GameRedemptionCtrl($scope, gameRedemption) {
     
 	// get, all gameBundle ('R' in Crud)
 	$scope.readall = function(){
