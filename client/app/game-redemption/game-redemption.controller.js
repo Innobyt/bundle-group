@@ -1,8 +1,8 @@
 (function() {
 	'use strict';
 
-	angular.module('gameRedemptionApp', ['ngTable', 'ngTableExport'])
-	  .controller('GameRedemptionCtrl', ['$scope', $filter, ngTableParams, 'gameRedemption', RetrieveCtrl]); 
+	angular.module('gamebundleApp', ['ngTable', 'ngTableExport'])
+	  .controller('GameRedemptionCtrl', ['$scope', $filter, ngTableParams, 'gameRedemption', GameRedemptionCtrl]); 
 	  
 	  // GameRedemptionCtrl requires R output, 
 	  // 'R' as in retrieve
