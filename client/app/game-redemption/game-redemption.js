@@ -11,6 +11,6 @@ angular.module('gamebundleApp')
 	  .state('game-redemption-admin', {
         url: '/game-redemption/admin',
         templateUrl: 'app/game-redemption/dashboard.html',
-        controller: 'GameRedemptionCtrl'
+        controller: 'DashboardCtrl'
       });
   });

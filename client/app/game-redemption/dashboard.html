@@ -20,24 +20,28 @@
       <!-- Admin-View Game Redemption - Claimed Redemption Keys -->
       <div class="jumbotron text-center"> <h1>Users: Claimed Redemption Keys</h1> </div>
       <div class="col-sm-8 col-sm-offset-2 list-group-item">		
-	<p><strong>Filter:</strong> {{tableParams.filter()|json}}
-	    <!-- <p>It use <a href="https://github.com/esvit/ng-table-export" target="_blank">ngTableExport</a></p> -->
-	    <a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="usersredemption.csv">Export to CSV</a>
-      <table ng-table="tableParams" show-filter="true" export-csv="csv" class="table table-striped">
-        <thead>
-          <th>gameredemption</th>
-        </thead>
-        <tbody>
-        <tr ng-repeat="redemption in $data">
-          <td data-title="'username'" filter="{ 'username': 'text' }">{{redemption.username}}</td>
-		  <td data-title="'email'">{{redemption.email}}</td>
-		  <td data-title="'game bundle name'" filter="{ 'bundlename': 'text' }">{{redemption.bundlename}}</td>
-		  <td data-title="'game titles'" filter="{ 'gamename': 'text' }">{{redemption.gamename}}</td>
-		  <td data-title="'claimed redemption key'">{{redemption.claimedkey}}</td>
-		  <td data-title="'timestamp'">{{redemption.timestamp}}</td>
+    <p><strong>Filter:</strong> {{tableParams.filter()|json}}
+      <p>It use <a href="https://github.com/esvit/ng-table-export" target="_blank">ngTableExport</a></p>
+
+    <a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="usersredemption.csv">Export to CSV</a>
+    <table ng-table="tableParams" show-filter="true" class="table">
+        <tr ng-repeat="user in $data">
+            <td data-title="'firstname'" filter="{ 'firstname': 'text' }">
+                {{user.firstname}}
+            </td>
+            <td data-title="'lastname'">
+                {{user.lastname}}
+            </td>
+            <td data-title="'email'">
+                {{user.email}}
+            </td>
+            <td data-title="'redemptionkey'">
+                {{user.redemptionkey}}
+            </td>
+            
         </tr>
-        </tbody>
-      </table>
+    </table>
+
 	  
 		</div>
 
