@@ -223,6 +223,22 @@ exports.submit = function(req, res) {
 	});
 };
 
+// index get a list of game-bundle documents
+exports.index = function(req, res) { 
+
+	// find all gamebundle documents
+    gameredemption.find({}, function(err, doc){
+
+        // return query
+        return err 
+        // handle error
+        ? handleError(res, err)
+        // handle success
+        : res.json(doc);
+
+    });
+ };
+
 function handleError(res, err) {
   return res.send(500, err);
 }
