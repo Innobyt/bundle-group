@@ -332,6 +332,9 @@ function parse_form_redemption(param){
         array_of_entries.push( JSON.parse( JSON.stringify( save ) ) );
         array_of_entries[i].gametitle = param.gamebundle.gamelist[i];
         array_of_entries[i].usedstatus = true;
+        array_of_entries[i].redemptioncode = "";
+        array_of_entries[i].cdkey = "";
+        array_of_entries[i].gamebundlename = "";
     }
 
 	return array_of_entries;
