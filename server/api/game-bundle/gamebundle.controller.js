@@ -255,12 +255,18 @@ exports.claim = function(req, res) {
 
         // claim redemptionkey
 		gamebundle.update(query, update, function(err,updated){
-			if(err) handleError(res,{message: ' error, could not update'});
+	
+			if(err) handleError(res,{ message: ' error, could not update' });
+	
+			// create response object
+			var respond = {
+				gamelist : found.gamelist,
+				bundlename : found.bundlename
+			};
+
+		    // send to claim response
+		    res.send({result : respond});
 		});
-
-	    // handle claim response
-	    res.send({error : err, result : found.gamelist});
-
     });
  };
 
