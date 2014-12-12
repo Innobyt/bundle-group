@@ -322,19 +322,23 @@ function parse_form_redemption(param){
 	save.timestamp = Date.now();
 
 	// create a browser header property
-	save.browser = params.req.headers['user-agent'];
+	save.browser = param.req.headers['user-agent'];
 
 	// create a remoteAddress property
-	save.remoteAddress = params.req.connection.remoteAddress;
+	save.remoteAddress = param.req.connection.remoteAddress;
+
+	// create redemptionkey property
+    save.redemptioncode = "";
+
+	// create a bundlename property
+    save.gamebundlename = "";
 
     // create an array of entries
     for(var i = 0, array_of_entries = []; i < param.gamebundle.gamelist.length; i++){
         array_of_entries.push( JSON.parse( JSON.stringify( save ) ) );
         array_of_entries[i].gametitle = param.gamebundle.gamelist[i];
         array_of_entries[i].usedstatus = true;
-        array_of_entries[i].redemptioncode = "";
         array_of_entries[i].cdkey = "";
-        array_of_entries[i].gamebundlename = "";
     }
 
 	return array_of_entries;
