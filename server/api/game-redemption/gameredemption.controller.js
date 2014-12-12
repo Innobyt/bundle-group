@@ -309,35 +309,28 @@ function handleError(res, err) {
 
 /**
  * Returns an array of entries to be store in redemptions collection.
+ * @param {object} 	submit 				- is a collection form properties.
  * @param {object} 	req 				- is an instance of http.IncomingMessage.
- * @param {object} 	submit 				- is the name of the gamebundle being redeemed.
  * @param {object} 	gamebundle 			- contains member properties {array} gamelist and {string} bundlename
  * @param {array} 	gametitledocuments 	- is an array of individual claimed gametitles documents.
  */
 function parse_form_redemption(param){
 
-	console.log(param.gametitledocuments);
-	console.log( "typeof : " + typeof param.gametitledocuments);
-	console.log(param.submit);
-	console.log( "typeof : " + typeof param.submit);
-	console.log(param.gamebundlename);
-	console.log( "typeof : " + typeof param.gamebundle);
+	var save = param.submit;
 
-	var save = params.req.body;
-
-	create a timestamp property
+	// create a timestamp property
 	save.timestamp = Date.now();
 
-	create a browser header property
+	// create a browser header property
 	save.browser = params.req.headers['user-agent'];
 
-	create a remoteAddress property
+	// create a remoteAddress property
 	save.remoteAddress = params.req.connection.remoteAddress;
 
-    create an array of entries
-    for(var i = 0, array_of_entries = []; i < params.array_of_gametitles.length; i++){
+    // create an array of entries
+    for(var i = 0, array_of_entries = []; i < param.gamebundle.gamelist.length; i++){
         array_of_entries.push( JSON.parse( JSON.stringify( save ) ) );
-        array_of_entries[i].gametitle = params.array_of_gametitles[i];
+        array_of_entries[i].gametitle = param.gamebundle.gamelist[i];
         array_of_entries[i].usedstatus = true;
     }
 
