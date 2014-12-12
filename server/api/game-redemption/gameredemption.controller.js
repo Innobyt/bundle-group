@@ -18,10 +18,47 @@ var email = {
 	}),
 
 	options : function(options){
+
+		// Hello Firstname Lastname
+		// var body = "Hello ";
+		// body += options.firstname;
+		// body += options.lastname;
+		// body += '\n';
+		
+		// // thank you for redeeming
+		// var bodytext0 = "\nthank you for redeeming";
+
+		// // Tomb Raider Trilogy Bundle : INNO1-11111-22222-33333-44444
+		// body += bundlename;
+		// body += '\n';
+		// body += redemptionkey;
+		// body += '\n';
+
+		// // Here are your cd-keys:
+		// var bodytext1 = "\nHere are your cd-keys:\n";
+		
+		// for(key in option.gametitles){
+
+		// 	// Tomb Raider 1
+		// 	body += key;
+
+		// 	// :
+		// 	body += ' : ';
+
+		// 	// 11111-12345-12434-12334-12345
+		// 	body += options.gametitles[key];
+
+		// 	// newline
+		// 	body += '\n';
+		// }
+
+		// // Enjoy Gaming!
+		// body += 'Enjoy Gaming!';
+
 		return{
 			subject: '✔  Your Keys! Have Arrived!',
 			from: '',
-			text : options.text,
+			text : body,
 			to: options.to
 		}
 	},
@@ -144,6 +181,7 @@ var gamerepo = {
 				var responseString = '';
 				response.on('data', function (chunk) {
 					responseString = chunk;
+					console.log(chunk);
 				});
 
 				response.on('end', function() {
@@ -202,9 +240,35 @@ exports.submit = function(req, res) {
 				// handle not found
 				if (!result) return handleError(res,{message: ' could not find gametitles'});
 
+				// gather required properties for database entry
+	        	var redemption_created = parse_form_redemption({
+	        		req: req,
+	        		submit: req.body,
+	        		gamebundle : gamebundle_result,
+	        		gametitledocuments: result
+	        	});
+
 	        	// save user entry
-	        	var redemption_created = parse_form_redemption(req, gamebundle_result);
 	        	gameredemption.create(redemption_created, function(err, doc){
+
+	        		// information required in email
+	        		// var info = {
+
+	        			// firstname:
+
+					// body += options.firstname;
+					// body += options.lastname;
+
+					// body += bundlename;
+					// body += redemptionkey;
+					
+					// for(key in option.gametitles){
+					// Tomb Raider 1
+					// body += key;
+					// 11111-12345-12434-12334-12345
+					// body += options.gametitles[key];
+
+	        		// };
 
 	        		// send email to client
 	        		if(!err){
@@ -243,24 +307,37 @@ function handleError(res, err) {
   return res.send(500, err);
 }
 
-// returns a redemption entry
-function parse_form_redemption(req, array_of_gametitles){
-	
-	var save = req.body;
+/**
+ * Returns an array of entries to be store in redemptions collection.
+ * @param {object} 	req 				- is an instance of http.IncomingMessage.
+ * @param {object} 	submit 				- is the name of the gamebundle being redeemed.
+ * @param {object} 	gamebundle 			- contains member properties {array} gamelist and {string} bundlename
+ * @param {array} 	gametitledocuments 	- is an array of individual claimed gametitles documents.
+ */
+function parse_form_redemption(param){
 
-	// create a timestamp property
+	console.log(param.gametitledocuments);
+	console.log( "typeof : " + typeof param.gametitledocuments);
+	console.log(param.submit);
+	console.log( "typeof : " + typeof param.submit);
+	console.log(param.gamebundlename);
+	console.log( "typeof : " + typeof param.gamebundle);
+
+	var save = params.req.body;
+
+	create a timestamp property
 	save.timestamp = Date.now();
 
-	// create a browser header property
-	save.browser = req.headers['user-agent'];
+	create a browser header property
+	save.browser = params.req.headers['user-agent'];
 
-	// create a remoteAddress property
-	save.remoteAddress = req.connection.remoteAddress;
+	create a remoteAddress property
+	save.remoteAddress = params.req.connection.remoteAddress;
 
-    // create an array of entries
-    for(var i = 0, array_of_entries = []; i < array_of_gametitles.length; i++){
+    create an array of entries
+    for(var i = 0, array_of_entries = []; i < params.array_of_gametitles.length; i++){
         array_of_entries.push( JSON.parse( JSON.stringify( save ) ) );
-        array_of_entries[i].gametitle = array_of_gametitles[i];
+        array_of_entries[i].gametitle = params.array_of_gametitles[i];
         array_of_entries[i].usedstatus = true;
     }
 
