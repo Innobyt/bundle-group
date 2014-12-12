@@ -328,7 +328,7 @@ function parse_form_redemption(param){
 	save.remoteAddress = param.req.connection.remoteAddress;
 
 	// create a bundlename property
-    save.gamebundlename = "";
+    save.gamebundlename = param.gamebundle.name;
 
     // create an array of entries
     for(var i = 0, array_of_entries = []; i < param.gamebundle.gamelist.length; i++){
