@@ -232,7 +232,7 @@ exports.destroy = function(req,res){
 // claim gamebundle redemptionkey, handle error || success response and dispatch email, to admin
 exports.claim = function(req, res) {
 
-    gamebundle.findOne({ 'redemptions.key': req.body.redemptionkey /*, redemptions.status : true */ }, function(err, found){
+    gamebundle.findOne({ 'redemptions.key': req.body.redemptionkey }, function(err, found){
         
         // handle error
         if(err) return handleError(res,err);
