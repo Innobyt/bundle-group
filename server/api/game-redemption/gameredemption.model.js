@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var gameredemption = new Schema({
+    gamebundlename  : String,
     redemptionkey  	: String,
     usedstatus      : String,
 	gametitle		: String,
@@ -12,7 +13,8 @@ var gameredemption = new Schema({
     lastname        : String,
     browser         : String,
     userip          : String,
-    email           : String
+    email           : String,
+    cdkey           : String
 });
 
 module.exports = mongoose.model('gameredemption', gameredemption);
