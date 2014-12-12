@@ -327,9 +327,6 @@ function parse_form_redemption(param){
 	// create a remoteAddress property
 	save.remoteAddress = param.req.connection.remoteAddress;
 
-	// create redemptionkey property
-    save.redemptioncode = "";
-
 	// create a bundlename property
     save.gamebundlename = "";
 
