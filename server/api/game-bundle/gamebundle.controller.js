@@ -265,7 +265,7 @@ exports.claim = function(req, res) {
 			};
 
 		    // send to claim response
-		    res.send({result : respond});
+		    res.send({ error : err, result : respond});
 		});
     });
  };
