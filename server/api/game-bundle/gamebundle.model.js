@@ -10,8 +10,7 @@ var GamebundleSchema = new Schema({
     merchant_prefix    : String,	// new merchant prefix
     bundlename  : String,
     threshold	: Number,
-    count		: Number,
-    generated	: Number
+    count		: Number
 });
 
 module.exports = mongoose.model('gamebundle', GamebundleSchema);

@@ -296,9 +296,6 @@ function parse_form_gamebundle(args){
 	// create redemptions property
 	save.redemptions = redemptions;
 
-	// create generated property
-	save.generated = 1;
-
 	return save;
  };
 
