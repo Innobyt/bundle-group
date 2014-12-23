@@ -77,45 +77,6 @@ var gamerepo = {
 	}
 };
 
-// 7.2.2 Control flow pattern #2: Full parallel
-var index_async = {
-
-    // sent
-    sent : false,
-
-    // hold a global variable
-    response_document : [],
-
-    rdk : function(arg, callback){
-        gamebundle.count({ 'bundlename' : arg.bundlename, 'redemptions.status' : false }, function (err, count) {
-        	console.log(count);
-            if(err) arg.rdk = 'err';
-            else    arg.rdk = count;
-            callback( index_async.complete() );
-        });
-    },
-
-    claimed_count_complete : function(){
-        for(var i = 0; i < index_async.response_document.length; i++)
-            if( !('rdk' in index_async.response_document[i]) ) return false;
-        return true;
-    },
-
-    complete : function(){
-        if(!index_async.sent && index_async.claimed_count_complete()) {
-            index_async.sent = true;
-            return true;
-        }
-        return false;
-    },
-
-    // initialize 7.2.2 Control flow pattern #2
-    initialize : function(){
-        index_async.sent = false;
-        index_async.response_document = [];
-    }
-};
-
 // create gamebundle document, handle error || success response
 exports.create = function(req, res) {
 
@@ -151,29 +112,37 @@ exports.create = function(req, res) {
 // index get a list of game-bundle documents
 exports.index = function(req, res) { 
 
-    // initialize 7.2.2 Control flow pattern #2
-    index_async.initialize();
-
     gamebundle.find({}, function(err, doc){
 
         // handle error 
         if(err) return handleError(res, err);
 
-	    // create aggreate gamebundle document/s
-		gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":true}},{ $group: { _id: "$bundlename", udk: { $sum: 1 } } }, function(err, aggregate){
-	        index_async.response_document = aggregate;
-	        
-	        // 7.2.2 Control flow pattern #2
-	        index_async.response_document.forEach(function(item) {
-	            index_async.rdk(item, function(complete){ 
-	            	if(complete) {
-	            		console.log('here');
-	            		res.json(index_async.response_document); 
-	            	}
-	            });
-	        });
-		});
+        // create base template aggregate document/s
+		gamebundle.aggregate({$group : { _id : '$bundlename'} }, function(err, aggregate){
+			// create aggreate document/s of gamebundle for new return response property udk
+			gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":true}},{ $group: { _id: "$bundlename", udk: { $sum: 1 } } }, function(err, aggregate_udk){
+				// create aggreate document/s of gamebundle for new return response property rdk
+				gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":false}},{ $group: { _id: "$bundlename", rdk: { $sum: 1 } } }, function(err, aggregate_rdk){
+					
+					// merge rdk property
+					while(aggregate_rdk.length){
+						for(var i = 0; i < aggregate.length; i++)
+							if(aggregate_rdk[0] && aggregate[i]._id == aggregate_rdk[0]._id)
+								aggregate[i].rdk = aggregate_rdk.shift().rdk;
+					};
 
+					// merge udk property
+					while(aggregate_udk.length){
+						for(var i = 0; i < aggregate.length; i++)
+							if(aggregate_udk[0] && aggregate[i]._id == aggregate_udk[0]._id)
+								aggregate[i].udk = aggregate_udk.shift().udk;
+					};
+
+					// respond with aggregated json
+					res.json(aggregate); 
+				});
+			});
+		});
     });
  };
 
@@ -303,7 +272,7 @@ exports.claim = function(req, res) {
         };
 
         // create update
-        var update = { $set: { "redemptions.$.status" : 'false' } };
+        var update = { $set: { "redemptions.$.status" : false } };
 
         // claim redemptionkey
 		gamebundle.update(query, update, function(err,updated){
