@@ -174,7 +174,15 @@ exports.show = function(req, res) {
 	});
  };
 
-// update add gamebundle redemption key
+/**
+ * put url:port/:id is used to automatically make redemptionkey, and
+ * stores to database gamebundle-dev at collection gamebundles where 
+ * embedded field redemptions, contains an array of objects, similar
+ * to { 'key' : string, "status" : boolean }
+ * with the following properties: merchant_prefix, count, 
+ * @param {object} 	req - is an instance of http.IncomingMessage..
+ * @param {object} res 	- and response is an instance of http.ServerResponse.
+ */
 exports.update = function(req, res) {
 
     var update_entries = parse_form_update_gamebundle(req.body);
