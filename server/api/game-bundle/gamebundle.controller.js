@@ -335,7 +335,7 @@ function parse_form_update_gamebundle(args){
 	// create redemptionkeys
 	var redemptionkeys = create_redemptionkeys({
 		prefix : args.merchant_prefix,
-		make : args.redemptionkeys
+		make : args.count
 	});
 
     // create a save
