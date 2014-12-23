@@ -109,41 +109,50 @@ exports.create = function(req, res) {
     });
  };
 
-// index get a list of game-bundle documents
+/**
+ * get url:port/index returns an aggregated gamebundle document/s 
+ * with the following properties: _id(bundlename), rdk , udk 
+ * @param {object} 	req - is an instance of http.IncomingMessage..
+ * @param {object} res 	- and response is an instance of http.ServerResponse.
+ */
 exports.index = function(req, res) { 
 
-    gamebundle.find({}, function(err, doc){
-
+    // create base template aggregate document/s
+	gamebundle.aggregate({$group : { _id : '$bundlename'} }, function(err, aggregate){
+        
         // handle error 
         if(err) return handleError(res, err);
+		
+		// create aggreate document/s of gamebundle for new return response property udk
+		gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":true}},{ $group: { _id: "$bundlename", udk: { $sum: 1 } } }, function(err, aggregate_udk){
 
-        // create base template aggregate document/s
-		gamebundle.aggregate({$group : { _id : '$bundlename'} }, function(err, aggregate){
-			// create aggreate document/s of gamebundle for new return response property udk
-			gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":true}},{ $group: { _id: "$bundlename", udk: { $sum: 1 } } }, function(err, aggregate_udk){
-				// create aggreate document/s of gamebundle for new return response property rdk
-				gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":false}},{ $group: { _id: "$bundlename", rdk: { $sum: 1 } } }, function(err, aggregate_rdk){
-					
-					// merge rdk property
-					while(aggregate_rdk.length){
-						for(var i = 0; i < aggregate.length; i++)
-							if(aggregate_rdk[0] && aggregate[i]._id == aggregate_rdk[0]._id)
-								aggregate[i].rdk = aggregate_rdk.shift().rdk;
-					};
+			// handle error 
+	        if(err) return handleError(res, err);
+			// create aggreate document/s of gamebundle for new return response property rdk
+			gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":false}},{ $group: { _id: "$bundlename", rdk: { $sum: 1 } } }, function(err, aggregate_rdk){
 
-					// merge udk property
-					while(aggregate_udk.length){
-						for(var i = 0; i < aggregate.length; i++)
-							if(aggregate_udk[0] && aggregate[i]._id == aggregate_udk[0]._id)
-								aggregate[i].udk = aggregate_udk.shift().udk;
-					};
+				// handle error 
+		        if(err) return handleError(res, err);
 
-					// respond with aggregated json
-					res.json(aggregate); 
-				});
+				// merge rdk property
+				while(aggregate_rdk.length){
+					for(var i = 0; i < aggregate.length; i++)
+						if(aggregate_rdk[0] && aggregate[i]._id == aggregate_rdk[0]._id)
+							aggregate[i].rdk = aggregate_rdk.shift().rdk;
+				};
+
+				// merge udk property
+				while(aggregate_udk.length){
+					for(var i = 0; i < aggregate.length; i++)
+						if(aggregate_udk[0] && aggregate[i]._id == aggregate_udk[0]._id)
+							aggregate[i].udk = aggregate_udk.shift().udk;
+				};
+
+				// respond with aggregated json
+				res.json(aggregate); 
 			});
 		});
-    });
+	});
  };
 
 // show get an individual game-bundle document
