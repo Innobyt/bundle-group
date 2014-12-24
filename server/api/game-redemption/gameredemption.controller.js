@@ -133,47 +133,44 @@ var gamebundle = {
 
 var gamerepo = {
 
-	// configure gamebundle server
-	options : function(args){
-		return{
-			// no default
-			headers: args.header || '',
-			// default port
-			port: args.port || 9000,
-			// default post
-			method: args.method || 'POST',
-			// default host
-			host: args.host || 'localhost',
-			// default path, no default api
-			path: '/api/game-repo/' + args.api
-		};
-	 },
-
-	headers: function(data){
-		return{
-			'Content-Type': 'application/json', 
-			'Content-Length': data.length
-		}
-	 },
-
 	post : {
 
 		claim : function(gametitle, callback){
 
-			gametitle.check = ' check';
+			// create url params
+			var param = gametitle.gametitle;
 
-			var data = JSON.stringify(gametitle);
+			// create post body properties
+			var body = {
+				timestamp : gametitle.timestamp
+			};
+
+			// create data for header options
+			var data = JSON.stringify(body);
+
+			console.log(data);
+
+			console.log(JSON.parse(data));
 
 			// create http.request options
-			var options = gamerepo.options({
-				
-				// set http.request headers
-				headers: gamerepo.headers(data),
+			var options = {
 
-				// set http.request
-				api: 'claim/' + gametitle
-			});
+				// no default
+				headers: {
+					'Content-Type': 'application/json', 
+					'Content-Length': data.length
+				},
 
+				// default port
+				port: 9000,
+				// default post
+				method: 'POST',
+				// default host
+				host: 'localhost',
+				// default path, no default api
+				path: '/api/game-repo/claim/' + param 
+			};
+   
 			var httpreq = http.request(options, function (response) {
 
 				response.setEncoding('utf8');
@@ -207,12 +204,23 @@ var gamerepo = {
 
 var AsyncLibrary = {
   each: function(query, callback){ 
+  	console.log("AsyncLibrary.each");
+  	console.log(query);
     gamerepo.post.claim(query, function(err, found){
+    	console.log('\n');
+    	console.log(found);
       callback(err, found);
     });
   }
 };
 
+/**
+ * post url:port/api/game-redemption/ accepts post fields redemptionkey (String), 
+ * usedstatus (String), firstname (String), lastname (String) email (String). 
+ * sends email to customers, provided email, containing cd-keys.
+ * @param {object} req 	- is an instance of http.IncomingMessage..
+ * @param {object} res 	- and response is an instance of http.ServerResponse.
+ */
 exports.submit = function(req, res) {
 
 	gameredemption.findOne({  redemptionkey : req.body.redemptionkey }, function(err, found){
@@ -226,13 +234,25 @@ exports.submit = function(req, res) {
         // post data to gamebundle, expect result to be true | false
         gamebundle.post.claim(req.body, function(err, gamebundle_result){
 
+        	console.log('here1');
+        	console.log(gamebundle_result);
+
         	// handle error
         	if(err) return handleError(res,{message: ' error'});
 
         	// handle not found
         	if (!gamebundle_result) return handleError(res,{message: ' could not find gametitles'});
 
-			async.map(gamebundle_result, AsyncLibrary.each.bind(AsyncLibrary), function(err, result){
+        	// create new game-repo request object, with timestamp requirement
+        	for(var i = 0, gamerepo_request = []; i < gamebundle_result.gamelist.length; i++)
+        		gamerepo_request.push({ timestamp : req.body.timestamp, gametitle : gamebundle_result.gamelist[i] });
+
+        	// Binding a context to an iterator
+			async.map(gamerepo_request, AsyncLibrary.each.bind(AsyncLibrary), function(err, result){
+
+				console.log('here2');
+
+				console.log(result);
 				
 				// handle error
 				if(err) return handleError(res,{message: ' error'});
@@ -271,12 +291,12 @@ exports.submit = function(req, res) {
 	        		// };
 
 	        		// send email to client
-	        		if(!err){
-	        			email.send({
-	        				to: req.body.email,
-							text: JSON.stringify(result)
-	        			});
-	        		}
+	      //   		if(!err){
+	      //   			email.send({
+	      //   				to: req.body.email,
+							// text: JSON.stringify(result)
+	      //   			});
+	      //   		}
 
 					return err ? handleError(res,err) : res.json(201, { // handle err, else handle success
 						redemption : redemption_created // return successful data from gamebundle
