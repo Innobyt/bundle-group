@@ -75,7 +75,13 @@ var gamerepo = {
 	}
 };
 
-// create gamebundle document, handle error || success response
+/**
+ * post url:port/api/game-bundle/ accepts post fields gamelist (CSV/String), 
+ * merchant (String), merchant_prefix (String), bundlename (String), threshold 
+ * (Number), count (Number). returns error response || success response
+ * @param {object} req 	- is an instance of http.IncomingMessage..
+ * @param {object} res 	- and response is an instance of http.ServerResponse.
+ */
 exports.create = function(req, res) {
 
     gamebundle.findOne({ bundlename: req.body.bundlename }, function(err, found){
