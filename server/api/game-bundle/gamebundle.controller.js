@@ -175,11 +175,11 @@ exports.show = function(req, res) {
  };
 
 /**
- * put url:port/:id is used to automatically make redemptionkey, and
- * stores to database gamebundle-dev at collection gamebundles where 
- * embedded field redemptions, contains an array of objects, similar
- * to { 'key' : string, "status" : boolean }
- * with the following properties: merchant_prefix, count, 
+ * put url:port/:id is used to automatically make redemptionkey, and stores
+ * to database gamebundle-dev at collection gamebundles where embedded field
+ * redemptions, contains an array of objects, similar to { 'key' : string, 
+ * "status" : boolean } and accepts the following properties: 
+ * merchant_prefix, count, threshold
  * @param {object} 	req - is an instance of http.IncomingMessage..
  * @param {object} res 	- and response is an instance of http.ServerResponse.
  */
@@ -206,6 +206,8 @@ exports.update = function(req, res) {
 
     // create an update
     var update = { 
+
+    	threshold : req.body.threshold,
 
     	$pushAll : { 
 
