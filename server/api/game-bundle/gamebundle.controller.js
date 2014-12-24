@@ -27,9 +27,7 @@ var email = {
 	},
 
 	send : function(send){
-		email.transporter.sendMail(email.options({
-			text : send.text
-		}));
+		email.transporter.sendMail(email.options(send));
 	}
 };
 
@@ -273,7 +271,12 @@ exports.destroy = function(req,res){
 	});
  };
 
-// claim gamebundle redemptionkey, handle error || success response and dispatch email, to admin
+/**
+ * post url:port/claim/ is used to claim a redemptionkey, reponds with error || success and
+ * dispatches email admin, if threshold is low. post accepts post fields: redemptionkey,
+ * @param {object} 	req - is an instance of http.IncomingMessage.
+ * @param {object} res 	- and response is an instance of http.ServerResponse.
+ */
 exports.claim = function(req, res) {
 
     gamebundle.findOne({ 'redemptions.key': req.body.redemptionkey }, function(err, found){
@@ -309,7 +312,7 @@ exports.claim = function(req, res) {
 			};
 
 		    // send to claim response
-		    res.send({ error : err, result : respond});
+		    res.json({ error : err, result : respond});
 		});
     });
  };
@@ -403,17 +406,24 @@ function parse_gametitles(data){
     return gametitle_array;
  };
 
-// accepts bundle name, and checks threshold. Email administration, if avaliable redemptionkeys is
-// below threshold level, comparison in percentage, avaliable status over total status.
+/**
+ * processthreshold, will send an email to the admin, based on
+ * 1-100%, if gamebundleth =< [(total unclaimed redemption-keys/ 
+ * total redemption-keys) x 100] send email to admin to alert them.
+ * @param {string} bundlename - the name of the bundle
+*/
 function process_threshold(bundlename){
+	// get threshold, and total redemptionskeys
     gamebundle.findOne({'bundlename':bundlename}, function(err, doc){
-        for(var i = 0, availability = 0; i < doc.redemptions.length; i++) {
-        	if(doc.redemptions[i].status == 'true') 
-        		availability++;
-        }
-        if( availability / doc.redemptions.length * 100 < doc.threshold ) {
-        	email.send({ text: bundlename });
-        }
+    	// get formula values
+    	var total = doc.redemptions.length;
+    	var threshold = doc.threshold;
+		// create aggreate document/s of gamebundle with count, of unclaimed
+		gamebundle.aggregate({$unwind:"$redemptions"},{$match:{ "bundlename" : bundlename, "redemptions.status":true}},{ $group: { _id: "$bundlename", unclaimed: { $sum: 1 } } }, function(err, bundle){
+			var unclaimed = bundle[0].unclaimed;
+    		if(unclaimed / total * 100 <= threshold)
+    			email.send({ text: bundlename + ' is below threshold', to : 'kyle@innobyt.com' });
+		});
     });
  };
 
