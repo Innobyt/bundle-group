@@ -243,7 +243,11 @@ exports.update = function(req, res) {
 
  };
 
-// delete a gamebundle document
+/**
+ * delete url:port/:id is used to delete a gamebundle document by id
+ * @param {object} 	req - is an instance of http.IncomingMessage.
+ * @param {object} res 	- and response is an instance of http.ServerResponse.
+ */
 exports.destroy = function(req,res){
 
 	// find game bundle by id
