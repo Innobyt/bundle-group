@@ -306,14 +306,14 @@ function parse_form_redemption(param){
 	save.remoteAddress = param.req.connection.remoteAddress;
 
 	// create a bundlename property
-    save.gamebundlename = param.gamebundle.name;
+    save.gamebundlename = param.gamebundle.bundlename;
 
     // create an array of entries
-    for(var i = 0, array_of_entries = []; i < param.gamebundle.gamelist.length; i++){
+    for(var i = 0, array_of_entries = []; i < param.gametitledocuments.length; i++){
         array_of_entries.push( JSON.parse( JSON.stringify( save ) ) );
-        array_of_entries[i].gametitle = param.gamebundle.gamelist[i];
+        array_of_entries[i].gametitle = param.gametitledocuments[i].gamename;
+        array_of_entries[i].cdkey = param.gametitledocuments[i].gamekey;
         array_of_entries[i].usedstatus = true;
-        array_of_entries[i].cdkey = param.gametitledocuments.gamekey;
     }
 
 	return array_of_entries;
