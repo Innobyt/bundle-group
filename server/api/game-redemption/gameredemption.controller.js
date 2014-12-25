@@ -17,58 +17,49 @@ var email = {
 		service: 'Gmail'
 	}),
 
-	options : function(options){
+	body : function(data){
 
 		// Hello Firstname Lastname
-		// var body = "Hello ";
-		// body += options.firstname;
-		// body += options.lastname;
-		// body += '\n';
+		var body_text = "Hello ";
+		body_text += data.firstname;
+		body_text += data.lastname;
+		body_text += '\n\n';
 		
-		// // thank you for redeeming
-		// var bodytext0 = "\nthank you for redeeming";
+		// thank you for redeeming
+		body_text += "thank you for redeeming";
+		body_text += '\n\n';
 
 		// // Tomb Raider Trilogy Bundle : INNO1-11111-22222-33333-44444
-		// body += bundlename;
-		// body += '\n';
-		// body += redemptionkey;
-		// body += '\n';
+		body_text += data.bundlename;
+		body_text += ' : ';
+		body_text += data.redemptionkey;
+		body_text += '\n';
 
 		// // Here are your cd-keys:
-		// var bodytext1 = "\nHere are your cd-keys:\n";
-		
-		// for(key in option.gametitles){
+		body_text += "\nHere are your cd-keys:\n\n";
 
-		// 	// Tomb Raider 1
-		// 	body += key;
-
-		// 	// :
-		// 	body += ' : ';
-
-		// 	// 11111-12345-12434-12334-12345
-		// 	body += options.gametitles[key];
-
-		// 	// newline
-		// 	body += '\n';
-		// }
-
-		// // Enjoy Gaming!
-		// body += 'Enjoy Gaming!';
-
-		return{
-			subject: '✔  Your Keys! Have Arrived!',
-			from: '',
-			text : body,
-			to: options.to
+		while(data.gametitles.length){
+			var fifoitem = data.gametitles.shift();
+			body_text += fifoitem.gamename;
+			body_text += " : ";
+			body_text += fifoitem.gamekey;
+			body_text += "\n";
 		}
+
+		// Enjoy Gaming!
+		body_text += "\n";
+		body_text += 'Enjoy Gaming!';
+
+		return body_text;
 	},
 
 	send : function(send){
-
-		email.transporter.sendMail(email.options({
-			text : send.text,
-			to: send.to
-		}));
+		email.transporter.sendMail({
+			subject: '✔  Your Keys! Have Arrived!',
+			text : email.body(send.data),
+			to: send.to,
+			from: ''
+		});
 	}
 };
 
@@ -148,10 +139,6 @@ var gamerepo = {
 			// create data for header options
 			var data = JSON.stringify(body);
 
-			console.log(data);
-
-			console.log(JSON.parse(data));
-
 			// create http.request options
 			var options = {
 
@@ -178,7 +165,6 @@ var gamerepo = {
 				var responseString = '';
 				response.on('data', function (chunk) {
 					responseString = chunk;
-					console.log(chunk);
 				});
 
 				response.on('end', function() {
@@ -204,11 +190,7 @@ var gamerepo = {
 
 var AsyncLibrary = {
   each: function(query, callback){ 
-  	console.log("AsyncLibrary.each");
-  	console.log(query);
     gamerepo.post.claim(query, function(err, found){
-    	console.log('\n');
-    	console.log(found);
       callback(err, found);
     });
   }
@@ -234,9 +216,6 @@ exports.submit = function(req, res) {
         // post data to gamebundle, expect result to be true | false
         gamebundle.post.claim(req.body, function(err, gamebundle_result){
 
-        	console.log('here1');
-        	console.log(gamebundle_result);
-
         	// handle error
         	if(err) return handleError(res,{message: ' error'});
 
@@ -249,10 +228,6 @@ exports.submit = function(req, res) {
 
         	// Binding a context to an iterator
 			async.map(gamerepo_request, AsyncLibrary.each.bind(AsyncLibrary), function(err, result){
-
-				console.log('here2');
-
-				console.log(result);
 				
 				// handle error
 				if(err) return handleError(res,{message: ' error'});
@@ -271,33 +246,16 @@ exports.submit = function(req, res) {
 	        	// save user entry
 	        	gameredemption.create(redemption_created, function(err, doc){
 
-	        		// information required in email
-	        		// var info = {
-
-	        			// firstname:
-
-					// body += options.firstname;
-					// body += options.lastname;
-
-					// body += bundlename;
-					// body += redemptionkey;
-					
-					// for(key in option.gametitles){
-					// Tomb Raider 1
-					// body += key;
-					// 11111-12345-12434-12334-12345
-					// body += options.gametitles[key];
-
-	        		// };
-
 	        		// send email to client
-	      //   		if(!err){
-	      //   			email.send({
-	      //   				to: req.body.email,
-							// text: JSON.stringify(result)
-	      //   			});
-	      //   		}
-
+	        		if(!err) email.send({ to: req.body.email, data: {
+	        			    bundlename: gamebundle_result.bundlename,
+	        			    redemptionkey: req.body.redemptionkey,
+	        			    firstname: req.body.firstname,
+	        			    lastname: req.body.lastname,
+	        			    gametitles: result
+						}
+        			});
+	        		
 					return err ? handleError(res,err) : res.json(201, { // handle err, else handle success
 						redemption : redemption_created // return successful data from gamebundle
 					});
@@ -355,7 +313,7 @@ function parse_form_redemption(param){
         array_of_entries.push( JSON.parse( JSON.stringify( save ) ) );
         array_of_entries[i].gametitle = param.gamebundle.gamelist[i];
         array_of_entries[i].usedstatus = true;
-        array_of_entries[i].cdkey = "";
+        array_of_entries[i].cdkey = param.gametitledocuments.gamekey;
     }
 
 	return array_of_entries;
