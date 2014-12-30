@@ -1,4 +1,4 @@
-// Generated on 2014-11-05 using generator-angular-fullstack 2.0.13
+// Generated on 2014-12-25 using generator-angular-fullstack 2.0.13
 'use strict';
 
 module.exports = function (grunt) {
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
-          livereload: 35730
+          livereload: true
         }
       },
       express: {
@@ -102,7 +102,7 @@ module.exports = function (grunt) {
         ],
         tasks: ['express:dev', 'wait'],
         options: {
-          livereload: 35730,
+          livereload: true,
           nospawn: true //Without this option specified express won't be reloaded
         }
       }
@@ -190,7 +190,7 @@ module.exports = function (grunt) {
         options: {
           nodeArgs: ['--debug-brk'],
           env: {
-            PORT: process.env.PORT || 9001
+            PORT: process.env.PORT || 9000
           },
           callback: function (nodemon) {
             nodemon.on('log', function (event) {

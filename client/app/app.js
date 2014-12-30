@@ -2,10 +2,10 @@
 
 angular.module('gamebundleApp', [
   'ngTable',
+  'ngTableExport',
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'btford.socket-io',
   'ui.router',
   'ui.bootstrap'
 ])

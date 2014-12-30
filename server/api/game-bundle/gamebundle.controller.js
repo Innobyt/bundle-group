@@ -49,7 +49,7 @@ var gamerepo = {
 				method: 'POST',
 				port: 9000,
 				host: 'localhost',
-				path: '/api/game-repo/has'
+				path: '/api/gamerepos/has'
 			};
 
 			var httpreq = http.request(options, function (response) {
