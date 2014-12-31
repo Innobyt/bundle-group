@@ -31,50 +31,6 @@ var email = {
 	}
 };
 
-var gamerepo = {
-
-	post : {
-		// accepts an array of gametitles, returns true | false | error callback
-		does_gametitles_exist : function(gamelist, callback){
-
-			var data = JSON.stringify(gamelist);
-
-			var headers = { 
-				'Content-Type': 'application/json', 
-				'Content-Length': data.length 
-			};
-
-			var options = {
-				headers: headers,
-				method: 'POST',
-				port: 9000,
-				host: 'localhost',
-				path: '/api/gamerepos/has'
-			};
-
-			var httpreq = http.request(options, function (response) {
-				response.setEncoding('utf8');
-
-				var responseString = '';
-
-				response.on('data', function (chunk) {
-					responseString = chunk;
-				});
-
-				response.on('end', function() {
-					callback( 
-						JSON.parse(responseString).err, 
-						JSON.parse(responseString).result
-					);
-				})
-			});
-
-			httpreq.write(data);
-			httpreq.end();	
-		}
-	}
-};
-
 /**
  * post url:port/api/game-bundle/ accepts post fields gamelist (CSV/String), 
  * merchant (String), merchant_prefix (String), bundlename (String), threshold 
@@ -92,24 +48,15 @@ exports.create = function(req, res) {
         // handle found
         if(found) return handleError(res,{message: ' duplicate entry found'});
         
-        // create gamerepoth document, handle error || create gamerepo document
-        gamerepo.post.does_gametitles_exist(req.body, function(err, result){
-
-        	// handle error
-        	if(err) return handleError(res,{message: ' error'});
-
-        	// handle not found
-        	if (!result) return handleError(res,{message: ' could not find gametitles'})
-
-        	// handle found
-        	var gamebundle_created = parse_form_gamebundle(req.body);
-        	gamebundle.create(gamebundle_created, function(err, doc){
-        		
-				return err ? handleError(res,err) : res.json(201, { // handle err, else handle success
-					gamebundle : gamebundle_created // return successful data from gamebundle
-				});
+    	// create gamebundle entries
+    	var gamebundle_created = parse_form_gamebundle(req.body);
+    	gamebundle.create(gamebundle_created, function(err, doc){
+    		
+			return err ? handleError(res,err) : res.json(201, { // handle err, else handle success
+				gamebundle : gamebundle_created // return successful data from gamebundle
 			});
-        });
+		});
+
     });
  };
 
@@ -342,9 +289,6 @@ function parse_form_gamebundle(args){
 	for(var i = 0; i < args.count; i++) {
 		redemptions.push( { status : true, key : redemptionkeys[i] } );
 	}
-
-	// override string of gamelist, and convert to array of gamelist
-	save.gamelist = parse_gametitles(save.gamelist);
 
 	// create redemptions property
 	save.redemptions = redemptions;
