@@ -141,14 +141,14 @@ exports.index = function(req, res) {
 				// merge rdk property
 				while(aggregate_rdk.length){
 					for(var i = 0; i < aggregate.length; i++)
-						if(aggregate_rdk[0] && aggregate[i]._id == aggregate_rdk[0]._id)
+						if(aggregate_rdk[0] && aggregate[i]._id.toString() == aggregate_rdk[0]._id.toString())
 							aggregate[i].rdk = aggregate_rdk.shift().rdk;
 				};
 
 				// merge udk property
 				while(aggregate_udk.length){
 					for(var i = 0; i < aggregate.length; i++)
-						if(aggregate_udk[0] && aggregate[i]._id == aggregate_udk[0]._id)
+						if(aggregate_udk[0] && aggregate[i]._id.toString() == aggregate_udk[0]._id.toString())
 							aggregate[i].udk = aggregate_udk.shift().udk;
 				};
 
