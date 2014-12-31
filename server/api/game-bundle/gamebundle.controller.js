@@ -121,19 +121,19 @@ exports.create = function(req, res) {
  */
 exports.index = function(req, res) { 
 
-    // create base template aggregate document/s
-	gamebundle.aggregate({$group : { _id : '$bundlename'} }, function(err, aggregate){
+    // create base template aggregate document/s using $project
+	gamebundle.aggregate({$project : { _id : '$_id', bundlename : '$bundlename'} }, function(err, aggregate){
         
         // handle error 
         if(err) return handleError(res, err);
 		
 		// create aggreate document/s of gamebundle for new return response property udk
-		gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":true}},{ $group: { _id: "$bundlename", udk: { $sum: 1 } } }, function(err, aggregate_udk){
+		gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":true}},{ $group: { _id: "$_id", udk: { $sum: 1 } } }, function(err, aggregate_udk){
 
 			// handle error 
 	        if(err) return handleError(res, err);
 			// create aggreate document/s of gamebundle for new return response property rdk
-			gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":false}},{ $group: { _id: "$bundlename", rdk: { $sum: 1 } } }, function(err, aggregate_rdk){
+			gamebundle.aggregate({$unwind:"$redemptions"},{$match:{"redemptions.status":false}},{ $group: { _id: "$_id", rdk: { $sum: 1 } } }, function(err, aggregate_rdk){
 
 				// handle error 
 		        if(err) return handleError(res, err);
