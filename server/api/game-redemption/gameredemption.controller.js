@@ -77,7 +77,7 @@ var gamebundle = {
 			// default host
 			host: args.host || 'localhost',
 			// default path, no default api
-			path: '/api/game-bundle/' + args.api,
+			path: '/api/gamebundles/' + args.api,
 		};
 	 },
 
@@ -155,7 +155,7 @@ var gamerepo = {
 				// default host
 				host: 'localhost',
 				// default path, no default api
-				path: '/api/game-repo/claim/' + param 
+				path: '/api/gamerepos/claim/' + param 
 			};
    
 			var httpreq = http.request(options, function (response) {
