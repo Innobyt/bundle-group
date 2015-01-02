@@ -2,6 +2,7 @@
 
 var http = require('http');
 var async = require('async');
+var constants = require('constants');
 var nodemailer = require('nodemailer');
 var gameredemption = require('./gameredemption.model');
 
@@ -77,7 +78,7 @@ var gamebundle = {
 			// default host
 			host: args.host || 'localhost',
 			// default path, no default api
-			path: '/api/game-bundle/' + args.api,
+			path: '/api/gamebundles/' + args.api,
 		};
 	 },
 
@@ -106,6 +107,8 @@ var gamebundle = {
 
 				response.on('data', function (chunk) {
 					responseString = chunk;
+					console.log("claim");
+					console.log(chunk);
 				});
 
 				response.on('end', function() {
@@ -139,6 +142,8 @@ var gamerepo = {
 			// create data for header options
 			var data = JSON.stringify(body);
 
+			console.log(data);
+
 			// create http.request options
 			var options = {
 
@@ -154,20 +159,27 @@ var gamerepo = {
 				method: 'POST',
 				// default host
 				host: 'localhost',
+				secureOptions: constants.SSL_OP_NO_TLSv1_2,
 				// default path, no default api
-				path: '/api/game-repo/claim/' + param 
+				path: '/api/gamerepos/claim/' + param 
 			};
    
 			var httpreq = http.request(options, function (response) {
+
+				console.log('gere4');
 
 				response.setEncoding('utf8');
 
 				var responseString = '';
 				response.on('data', function (chunk) {
 					responseString = chunk;
+					console.log("gamerepo");
+					console.log(chunk);
 				});
 
 				response.on('end', function() {
+
+					console.log('gere3');
 
 					// convert responseString to object
 					var res = JSON.parse(responseString);
@@ -181,8 +193,11 @@ var gamerepo = {
 				});
 			});
 
+			console.log('gere');
 			httpreq.write(data);
+			console.log('gere1');
 			httpreq.end();	
+			console.log('gere2');
 
 		}
 	 }
@@ -191,6 +206,7 @@ var gamerepo = {
 var AsyncLibrary = {
   each: function(query, callback){ 
     gamerepo.post.claim(query, function(err, found){
+    	console.log('here');
       callback(err, found);
     });
   }

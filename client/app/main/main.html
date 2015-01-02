@@ -1,10 +1,32 @@
-<!-- client/app/main/main.html -->
-
-<div ng-include="'components/navbar/navbar.html'"></div>
-
-<div class="jumbotron" ng-controller="MainCtrl">
-  <div class="container">
-    <h1>Hello, world!</h1>
-    <p><a class="btn btn-primary btn-lg" href="/login" role="button">Login</a></p>
-  </div>
+<div ng-include="'../components/navbar/navbar.html'"></div>
+<header class="hero-unit" id="banner">
+	<div class="container">
+		<h1>Redemption Form</h1>
+	</div>
+</header>
+<div class="container">
+	<form>
+		<div class="form-group">
+			<label>Your First Name</label>
+			<input type="text"  name="firstname" class="form-control" id="firstname" placeholder="JohnDoe">
+		</div>
+		<div class="form-group">
+			<label>Your Last Name</label>
+			<input type="text"  name="lastname" class="form-control" id="lastname" placeholder="JohnDoe">
+		</div>
+		<div class="form-group">
+			<label>Your Email Address</label>
+			<input type="text" name="email" class="form-control" id="email" placeholder="yourname@email.com">
+		</div>
+		<div class="form-group">
+			<label>Your Redemption Key</label>
+			<input type="text" name="redemptionkey" class="form-control" id="redemptionkey" placeholder="XXXXX-XXXXX-XXXXX-XXXXX-XXXXX">
+		</div>
+		<button type="submit" class="btn btn-primary" ng-click="submit()">Redeem Now!</button>
+	</form>
 </div>
+<footer class="footer">
+  <div class="container">
+      <p><a href="http://innobyt.com">Innobyt Redemption Web Application</a></p>
+  </div>
+</footer>
