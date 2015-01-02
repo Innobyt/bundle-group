@@ -370,7 +370,12 @@ function process_threshold(bundlename){
     	var threshold = doc.threshold;
 		// create aggreate document/s of gamebundle with count, of unclaimed
 		gamebundle.aggregate({$unwind:"$redemptions"},{$match:{ "bundlename" : bundlename, "redemptions.status":true}},{ $group: { _id: "$bundlename", unclaimed: { $sum: 1 } } }, function(err, bundle){
-			var unclaimed = bundle[0].unclaimed;
+			
+			// if aggregate provides unclaimed
+			var unclaimed = bundle[0].hasOwnProperty('unclaimed') 
+			? bundle[0].unclaimed 
+			: 0;
+    		
     		if(unclaimed / total * 100 <= threshold)
     			email.send({ text: bundlename + ' is below threshold', to : 'kyle@innobyt.com' });
 		});
