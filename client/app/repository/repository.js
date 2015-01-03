@@ -16,13 +16,13 @@ angular.module('gamebundleApp')
         authenticate: true
       })
     .state('view', {
-        url: '/view/:bundlename',
+        url: '/view/:id',
         templateUrl: 'app/repository/view/view.html',
         controller: 'ViewCtrl',
         authenticate: true
       })
       .state('update', {
-        url: '/update/:bundlename',
+        url: '/update/:id',
         templateUrl: 'app/repository/update/update.html',
         controller: 'UpdateCtrl',
         authenticate: true

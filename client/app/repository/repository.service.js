@@ -7,10 +7,10 @@ angular
 repository.$inject = ['$resource'];
 
 function repository($resource) {
-    return $resource('/api/gamebundles/:id', { id: '@id' },
+    return $resource('/api/gamebundles/:id', { id: '@_id' },
     {
-      'update': { method: 'PUT',},
-      'view': { method: 'GET', isArray: true},
-      'query': { method: 'GET', isArray: true }
-    });
+			'update': { method: 'PUT' },
+			'view': { method: 'GET', isArray: false },
+			'query': { method: 'GET', isArray: true },
+		});
   }

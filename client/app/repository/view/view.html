@@ -4,26 +4,17 @@
 		<h1>Available Keys for {{bundlename}} </h1>
 	</div>
 </header>
-
 <div class="container">
-	<div class="col-md-6">
-		<h2>Unclaimed CD-Keys</h2>
+	<pre><h3>Game List: <span ng-repeat="game in gamelist">{{game.gametitle}}, </span></h3></pre>
+		<h2>Redemption-Keys</h2>
 		<a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="{{bundlename}}-unclaimed.csv">Export to CSV</a>
-		<table ng-table="tableParams" class="table" export-csv="csv">
-			<tr ng-repeat="key in $data | filter: { keystatus: true } ">
-				<td data-title="'CD-Keys'">
-					{{key.gamekey}}
+		<table ng-table="tableParams" show-filter="true" class="table" export-csv="csv">
+			<tr ng-repeat="key in $data">
+				<td data-title="'Redemption-Keys'" filter="{ 'key': 'text' }">
+					{{key.key}}
 				</td>
-			</tr>
-		</table>
-	</div>
-	<div class="col-md-6">
-		<h2>Claimed CD-Keys</h2>
-		<a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="{{bundlename}}-claimed.csv">Export to CSV</a>
-		<table ng-table="tableParams" class="table" export-csv="csv">
-			<tr ng-repeat="key in $data | filter: { keystatus: false } ">
-				<td data-title="'CD-Keys'">
-					{{key.gamekey}}
+				<td data-title="'Unclaimed'" sortable="'status'">
+					{{key.status}}
 				</td>
 			</tr>
 		</table>

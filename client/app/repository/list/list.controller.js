@@ -9,9 +9,11 @@
 	
 	// CreateCtrl requires 1 actions of CRUD, C as in create
 	function ListCtrl($scope, $filter, ngTableParams, repository) {
+		$scope.list = [];
 		$scope.list = repository.query();
-
+		var data = [];
 		var data = $scope.list;
+		
 		$scope.tableParams = new ngTableParams({
 				page: 1,            // show first page
 				count: 10,          // count per page

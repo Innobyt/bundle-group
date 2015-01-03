@@ -11,8 +11,8 @@
 	<table ng-table="tableParams" show-filter="true" class="table" export-csv="csv">
 
 		<tr ng-repeat="gamebundle in $data">
-			<td data-title="'Game Bundle'" sortable="'_id'" filter="{ '_id': 'text' }">
-				{{gamebundle._id}}
+			<td data-title="'Game Bundle'" sortable="'_id'" filter="{ 'bundlename': 'text' }">
+				{{gamebundle.bundlename}}
 			</td>
 			<td data-title="'Unclaimed'" sortable="'udk'" filter="{ 'udk': 'text' }">
 				{{gamebundle.udk}}
