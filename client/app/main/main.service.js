@@ -3,7 +3,7 @@
 
 	angular
 	    .module('gamebundleApp')
-	    .factory('mainservice', ['$resource', mainservice]);
+	    .factory('mainService', ['$resource', mainService]);
 
 	function mainservice($resource) {
 		return $resource('/api/gameredemptions/:id', {}, {

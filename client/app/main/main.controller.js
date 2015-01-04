@@ -1,19 +1,25 @@
-'use strict';
+(function() {
+	'use strict';
 
-angular.module('gamebundleApp')
-  .controller('MainCtrl', ['$scope', 'mainservice', MainCtrl]); 
+	angular.module('gamebundleApp')
+	  .controller('MainCtrl', MainCtrl);
+	
+	MainCtrl.$inject=['$scope', 'mainService'];
 
-	function MainCtrl($scope, mainservice) {
-		
+	// CreateCtrl requires 1 actions of CRUD, C as in create
+	function MainCtrl($scope, mainService) {
+
 		$scope.initialize = function(){
-			$scope.formData = new mainservice();
+			$scope.formData = new mainService();
 		};
 
 		$scope.submit = function() {
-			$scope.formData.$save(function(){ 
-				$scope.initialize(); 
+			$scope.formData.$save(function(){
+				$scope.initialize();
 			});
 		};
 		
 		$scope.initialize();
-	};
+	}
+//
+})();

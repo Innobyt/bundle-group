@@ -12,5 +12,6 @@ function repository($resource) {
 			'update': { method: 'PUT' },
 			'view': { method: 'GET', isArray: false },
 			'query': { method: 'GET', isArray: true },
+			'getGametitles': { method: 'GET', url: 'http://localhost:9000/api/gamerepos', isArray: true }
 		});
   }

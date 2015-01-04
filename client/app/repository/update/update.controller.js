@@ -9,9 +9,11 @@
 	// CreateCtrl requires 1 actions of CRUD, C as in create
 	function UpdateCtrl($scope, $stateParams, repository) {
 		//get /:bundlename from url and populate to $scope.bundlename		
-		$scope.bundlename = $stateParams.bundlename;
+		$scope.bundleid = $stateParams.id;
 
-		var bundlename = $scope.bundlename;
+//		var bundleid = $scope.id;
+		$scope.formData =  repository.
+
 
 		// initialize repository controller and services
 		$scope.initialize = function(){
@@ -25,14 +27,14 @@
 			$scope.formData.$update(function(){ $scope.initialize(); });
 		};
 		
-		$scope.filesChanged = function(elm){
-			var reader = new FileReader();
-			reader.onload = function(e){
-				$scope.formData.gamekeys = e.target.result;
-				$scope.$apply();
-			};
-			reader.readAsText(elm.files[0]);
-		};
+//		$scope.filesChanged = function(elm){
+//			var reader = new FileReader();
+//			reader.onload = function(e){
+//				$scope.formData.gamekeys = e.target.result;
+//				$scope.$apply();
+//			};
+//			reader.readAsText(elm.files[0]);
+//		};
 
 		$scope.initialize();
 	}
