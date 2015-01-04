@@ -9,10 +9,7 @@
 	// CreateCtrl requires 1 actions of CRUD, C as in create
 	function UpdateCtrl($scope, $stateParams, repository) {
 		//get /:bundlename from url and populate to $scope.bundlename		
-		$scope.bundleid = $stateParams.id;
-
-//		var bundleid = $scope.id;
-		$scope.formData =  repository.
+		repository.view({ id: $stateParams.id }).$promise.then(function (response) {$scope.formData = response;});
 
 
 		// initialize repository controller and services
@@ -23,7 +20,6 @@
 		// put, repository update ('U' in Crud)
 		$scope.submit = function() {
 			//pass in bundlename into formData
-			$scope.formData.bundlename = bundlename;
 			$scope.formData.$update(function(){ $scope.initialize(); });
 		};
 		
