@@ -21,7 +21,7 @@
 			$scope.formData.merchant = response.merchant;
 		});
 
-			console.log($scope.formData);
+
 		// initialize repository controller and services
 //		$scope.initialize = function() {
 //			$scope.formData = new repository();
