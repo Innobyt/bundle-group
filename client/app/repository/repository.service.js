@@ -7,11 +7,24 @@ angular
 repository.$inject = ['$resource'];
 
 function repository($resource) {
-    return $resource('/api/gamebundles/:id', { id: '@_id' },
-    {
-			'update': { method: 'PUT' },
-			'view': { method: 'GET', isArray: false },
-			'query': { method: 'GET', isArray: true },
-			'getGametitles': { method: 'GET', url: 'http://localhost:9000/api/gamerepos', isArray: true }
-		});
-  }
+	return $resource('/api/gamebundles/:id', {
+		id: '@_id'
+	}, {
+		'update': {
+			method: 'PUT'
+		},
+		'view': {
+			method: 'GET',
+			isArray: false
+		},
+		'query': {
+			method: 'GET',
+			isArray: true
+		},
+		'getGametitles': {
+			method: 'GET',
+			url: 'http://localhost:9000/api/gamerepos',
+			isArray: true
+		}
+	});
+}
