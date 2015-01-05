@@ -43,15 +43,6 @@
 			});
 		};
 
-		//		$scope.filesChanged = function(elm){
-		//			var reader = new FileReader();
-		//			reader.onload = function(e){
-		//				$scope.formData.gamekeys = e.target.result;
-		//				$scope.$apply();
-		//			};
-		//			reader.readAsText(elm.files[0]);
-		//		};
-
 		$scope.initialize();
 	}
 })();

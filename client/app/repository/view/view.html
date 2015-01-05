@@ -8,6 +8,7 @@
 	<pre><h3>Game List: <span ng-repeat="game in gamelist">{{game.gametitle}}, </span></h3></pre>
 		<h2>Redemption-Keys</h2>
 		<a class="btn btn-primary" ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="{{bundlename}}-unclaimed.csv">Export to CSV</a>
+		<a class="btn btn-primary" ui-sref="list">Back to list</a>
 		<table ng-table="tableParams" show-filter="true" class="table" export-csv="csv">
 			<tr ng-repeat="key in $data">
 				<td data-title="'Redemption-Keys'" filter="{ 'key': 'text' }">
