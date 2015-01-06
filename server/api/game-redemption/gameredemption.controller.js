@@ -109,9 +109,15 @@ var gamebundle = {
 				});
 
 				response.on('end', function() {
-					callback( 
-						JSON.parse(responseString).error, 
-						JSON.parse(responseString).result
+
+					// parse json string into object
+					var responseobject = JSON.parse(responseString);
+					
+					callback(
+						// did response return with an error property ?
+						responseobject.hasOwnProperty('error') ? responseobject.error : null,
+						// did response return with an error result ?
+						responseobject.hasOwnProperty('result') ? responseobject.result : null
 					);
 				})
 			});
@@ -213,14 +219,14 @@ exports.submit = function(req, res) {
         // handle found
         if(found) return handleError(res,{message: ' duplicate entry found'});
 
-        // post data to gamebundle, expect result to be true | false
+        // post data to external gamebundle api
         gamebundle.post.claim(req.body, function(err, gamebundle_result){
 
         	// handle error
-        	if(err) return handleError(res,{message: ' error'});
+        	if(err) return handleError(res, err);
 
         	// handle not found
-        	if (!gamebundle_result) return handleError(res,{message: ' could not find gametitles'});
+        	if (!gamebundle_result) return handleError(res,{message: ' could not redeem key'});
 
         	// create new game-repo request object, with timestamp requirement
         	for(var i = 0, gamerepo_request = []; i < gamebundle_result.gamelist.length; i++)
