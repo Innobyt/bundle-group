@@ -238,7 +238,7 @@ exports.claim = function(req, res) {
         if(err) return handleError(res,err);
 
 	    // handle claimed response
-        if(!found) return handleError(res,{message: ' redemption code is not avaliable or has been claimed'});
+        if(!found) return handleError(res,{error: ' redemption code is not avaliable or has been claimed'});
 
         // process threshold, will send an administrative email, if
         // comparison, is below threshold percentage
