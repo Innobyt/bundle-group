@@ -26,6 +26,12 @@ angular.module('gamebundleApp')
         templateUrl: 'app/repository/update/update.html',
         controller: 'UpdateCtrl',
         authenticate: true
+      })
+    .state('dashboard', {
+        url: '/dashboard',
+        templateUrl: 'app/repository/dashboard/dashboard.html',
+        controller: 'DashboardCtrl',
+        authenticate: true
       });
   });
 

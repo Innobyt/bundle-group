@@ -25,6 +25,11 @@ function repository($resource) {
 			method: 'GET',
 			url: 'http://localhost:9000/api/gamerepos',
 			isArray: true
+		},
+		'getGameredemptions': {
+			method: 'GET',
+			url: '/api/gameredemptions',
+			isArray: true
 		}
 	});
 }
