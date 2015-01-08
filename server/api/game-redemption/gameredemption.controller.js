@@ -10,8 +10,8 @@ var email = {
 	transporter : nodemailer.createTransport({
 
 		auth: {
-			user: '',
-			pass: ''
+			user: 'admin@innobyt.com',
+			pass: '!nn0byT!'
 		},
 
 		service: 'Gmail'
@@ -65,13 +65,13 @@ var email = {
 
 var gamebundle = {
 
-	// configure gamebundle server
+	// configure gamebundle server - mirror server settings *calvyn
 	options : function(args){
 		return{
 			// no default
 			headers: args.headers || '',
 			// default port
-			port: args.port || 9001,
+			port: args.port || 7000,
 			// default post
 			method: args.method || 'POST',
 			// default host
@@ -84,7 +84,7 @@ var gamebundle = {
 	headers: function(data){
 		return{
 			'Content-Type': 'application/json', 
-			'Content-Length': data.length
+			'Content-Length': Buffer.byteLength(data)
 		}
 	 },
 
@@ -112,7 +112,7 @@ var gamebundle = {
 
 					// parse json string into object
 					var responseobject = JSON.parse(responseString);
-					
+
 					callback(
 						// did response return with an error property ?
 						responseobject.hasOwnProperty('error') ? responseobject.error : null,
@@ -129,7 +129,7 @@ var gamebundle = {
 };
 
 var gamerepo = {
-
+	// configure gamerepo location - mirror gamerepo server settings *calvyn
 	post : {
 
 		claim : function(gametitle, callback){
@@ -151,7 +151,7 @@ var gamerepo = {
 				// no default
 				headers: {
 					'Content-Type': 'application/json', 
-					'Content-Length': data.length
+					'Content-Length': Buffer.byteLength(data)
 				},
 
 				// default port
@@ -163,7 +163,7 @@ var gamerepo = {
 				// default path, no default api
 				path: '/api/gamerepos/claim/' + param 
 			};
-   
+
 			var httpreq = http.request(options, function (response) {
 
 				response.setEncoding('utf8');
@@ -222,7 +222,7 @@ exports.submit = function(req, res) {
         // post data to external gamebundle api
         gamebundle.post.claim(req.body, function(err, gamebundle_result){
 
-        	// handle error
+			// handle error
         	if(err) return handleError(res, err);
 
         	// handle not found
@@ -230,11 +230,12 @@ exports.submit = function(req, res) {
 
         	// create new game-repo request object, with timestamp requirement
         	for(var i = 0, gamerepo_request = []; i < gamebundle_result.gamelist.length; i++)
-        		gamerepo_request.push({ timestamp : req.body.timestamp, gametitle : gamebundle_result.gamelist[i] });
+//				gamerepo_request.push({ timestamp : req.body.timestamp, gametitle : gamebundle_result.gamelist[i] });  *calvyn
+				gamerepo_request.push({ timestamp : req._startTime, gametitle : gamebundle_result.gamelist[i].gametitle });
 
         	// Binding a context to an iterator
 			async.map(gamerepo_request, AsyncLibrary.each.bind(AsyncLibrary), function(err, result){
-				
+
 				// handle error
 				if(err) return handleError(res,{message: ' error'});
 
@@ -309,7 +310,7 @@ function parse_form_redemption(param){
 	save.browser = param.req.headers['user-agent'];
 
 	// create a remoteAddress property
-	save.remoteAddress = param.req.connection.remoteAddress;
+	save.remoteAddress = param.req.connection._remoteAddress;
 
 	// create a bundlename property
     save.gamebundlename = param.gamebundle.bundlename;
@@ -323,4 +324,5 @@ function parse_form_redemption(param){
     }
 
 	return array_of_entries;
+
 }

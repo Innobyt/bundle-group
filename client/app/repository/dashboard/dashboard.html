@@ -27,7 +27,7 @@
 				{{gameredemption.firstname}} 
 			</td>
 			<td data-title="'Timestamp'" sortable="'timestamp'" filter="{ 'timestamp': 'text' }"> 
-				{{gameredemption.timestamp}} 
+				{{gameredemption.timestamp | date:"dd/mm/yyyy 'at' h:mma"}} 
 			</td>
 			<td data-title="'Lastname'" sortable="'lastname'" filter="{ 'lastname': 'text' }"> 
 				{{gameredemption.lastname}} 
