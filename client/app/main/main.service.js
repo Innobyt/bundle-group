@@ -11,7 +11,7 @@ function mainService($resource) {
 		update: {
 			method: 'PUT',
 			params: {
-				id: '@id'
+				id: '@_id'
 			}
 		}
 	});
