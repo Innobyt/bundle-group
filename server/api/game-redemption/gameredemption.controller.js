@@ -58,7 +58,7 @@ var email = {
 			subject: '✔  Your Keys! Have Arrived!',
 			text : email.body(send.data),
 			to: send.to,
-			from: ''
+			from: this.transporter.user
 		});
 	}
 };
