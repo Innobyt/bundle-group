@@ -10,8 +10,8 @@ var email = {
 	transporter : nodemailer.createTransport({
 
 		auth: {
-			user: 'enter email',
-			pass: 'enter password'
+			user: 'admin@innobyt.com',
+			pass: '!nn0byT!'
 		},
 
 		service: 'Gmail'

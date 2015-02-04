@@ -29,7 +29,7 @@ function repository($resource) {
 		},
 		'getGametitles': {
 			method: 'GET',
-			url: 'http://localhost:9000/api/gamerepos',
+			url: 'http://sgvps6.innobyt.com:9000/api/gamerepos',
 			isArray: true
 		},
 		'getGameredemptions': {

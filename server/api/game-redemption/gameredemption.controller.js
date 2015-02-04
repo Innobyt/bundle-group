@@ -10,8 +10,8 @@ var email = {
 	transporter: nodemailer.createTransport({
 
 		auth: {
-			user: 'enter email',
-			pass: 'enter password'
+			user: 'admin@innobyt.com',
+			pass: '!nn0byT!'
 		},
 
 		service: 'Gmail'
@@ -71,11 +71,11 @@ var gamebundle = {
 			// no default
 			headers: args.headers || '',
 			// default port
-			port: args.port || 9001,
+			port: args.port || 9000,
 			// default post
 			method: args.method || 'POST',
 			// default host
-			host: args.host || 'localhost',
+			host: args.host || 'tact.innobyt.com',
 			// default path, no default api
 			path: '/api/gamebundles/' + args.api,
 		};
@@ -159,7 +159,7 @@ var gamerepo = {
 				// default post
 				method: 'POST',
 				// default host
-				host: 'localhost',
+				host: 'sgvps6.innobyt.com',
 				// default path, no default api
 				path: '/api/gamerepos/claim/' + param
 			};

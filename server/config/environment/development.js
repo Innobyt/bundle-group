@@ -8,5 +8,5 @@ module.exports = {
     uri: 'mongodb://localhost/gamebundle-dev'
   },
 
-  seedDB: false
+  seedDB: true
 };
