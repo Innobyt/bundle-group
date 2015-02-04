@@ -123,6 +123,10 @@ var gamebundle = {
 			});
 
 			httpreq.write(data);
+			httpreq.on('error', function(error) {
+				// Error handling here
+				console.log(error);
+			});
 			httpreq.end();
 		}
 	}
@@ -188,6 +192,10 @@ var gamerepo = {
 			});
 
 			httpreq.write(data);
+			httpreq.on('error', function(error) {
+				// Error handling here
+				console.log(error);
+			});
 			httpreq.end();
 
 		}
