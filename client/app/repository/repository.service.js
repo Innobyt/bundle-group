@@ -21,6 +21,12 @@ function repository($resource) {
 			method: 'GET',
 			isArray: true
 		},
+		'delete': {
+			method: 'DELETE',
+			params: {
+				id: '@_id'
+			}
+		},
 		'getGametitles': {
 			method: 'GET',
 			url: 'http://localhost:9000/api/gamerepos',

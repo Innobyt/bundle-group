@@ -10,8 +10,8 @@ var email = {
 	transporter : nodemailer.createTransport({
 
 		auth: {
-			user: '',
-			pass: ''
+			user: 'enter email',
+			pass: 'enter password'
 		},
 
 		service: 'Gmail'

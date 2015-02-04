@@ -4,11 +4,12 @@
 	angular.module('gamebundleApp')
 	  .controller('ViewCtrl', ViewCtrl);
 
-	ViewCtrl.$inject=['$scope', '$filter', '$stateParams', 'ngTableParams', 'repository'];
+	ViewCtrl.$inject=['$scope', '$filter', '$state', '$stateParams', 'ngTableParams', 'repository'];
 	// UpdateCtrl requires 2 actions of CRUD, 
 	// 'R' as in retrieve, 'U' as in update
-	function ViewCtrl($scope, $filter, $stateParams, ngTableParams, repository) {
+	function ViewCtrl($scope, $filter, $state, $stateParams, ngTableParams, repository) {
 		/*jshint validthis: true */
+
 		$scope.gamekeys = {};
 		$scope.gamekeys = repository.view({ id: $stateParams.id }).$promise.then(
 			function (response) {
@@ -39,5 +40,11 @@
 					}
 				});
 			});
+		$scope.deleteEntry = function() {
+			repository.delete({
+				id: $stateParams.id
+			});
+			$state.go('list');
+		};
 	}
 })();

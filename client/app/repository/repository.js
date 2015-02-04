@@ -1,21 +1,21 @@
 'use strict';
 
 angular.module('gamebundleApp')
-  .config(function ($stateProvider) {
+  .config(function($stateProvider) {
     $stateProvider
-	.state('create', {
+      .state('create', {
         url: '/create',
         templateUrl: 'app/repository/create/create.html',
         controller: 'CreateCtrl',
         authenticate: true
       })
-    .state('list', {
+      .state('list', {
         url: '/list',
         templateUrl: 'app/repository/list/list.html',
         controller: 'ListCtrl',
         authenticate: true
       })
-    .state('view', {
+      .state('view', {
         url: '/view/:id',
         templateUrl: 'app/repository/view/view.html',
         controller: 'ViewCtrl',
@@ -27,11 +27,10 @@ angular.module('gamebundleApp')
         controller: 'UpdateCtrl',
         authenticate: true
       })
-    .state('dashboard', {
+      .state('dashboard', {
         url: '/dashboard',
         templateUrl: 'app/repository/dashboard/dashboard.html',
         controller: 'DashboardCtrl',
         authenticate: true
       });
   });
-

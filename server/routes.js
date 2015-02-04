@@ -22,6 +22,6 @@ module.exports = function(app) {
   app.route('/*')
     .get(function(req, res) {
       res.sendfile('index.html', { root: '../client' }); //when deploying using the cmd --> pm2 start server/app.js
-//      res.sendfile('index.html', { root: './client' }); //when deploying using the cmd --> grunt serve
+ //    res.sendfile('index.html', { root: './client' }); //when deploying using the cmd --> grunt serve
     });
 };
