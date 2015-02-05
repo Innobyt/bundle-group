@@ -19,7 +19,8 @@
 		$scope.addItem = function() {
 			if ($scope.selectedItem !== undefined) {
 				$scope.items.push({
-					gametitle: $scope.selectedItem.gamename
+					gametitle: $scope.selectedItem.gamename,
+					gamenameSlug: $scope.selectedItem.gamenameSlug
 				});
 			}
 		};

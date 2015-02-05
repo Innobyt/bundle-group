@@ -75,7 +75,7 @@ var gamebundle = {
 			// default post
 			method: args.method || 'POST',
 			// default host
-			host: args.host || 'tact.innobyt.com',
+			host: args.host || 'localhost',
 			// default path, no default api
 			path: '/api/gamebundles/' + args.api,
 		};
@@ -125,7 +125,8 @@ var gamebundle = {
 			httpreq.write(data);
 			httpreq.on('error', function(error) {
 				// Error handling here
-				console.log(error);
+				console.log("gamebundle" + error);
+				httpreq.end();
 			});
 			httpreq.end();
 		}
@@ -139,7 +140,7 @@ var gamerepo = {
 		claim: function(gametitle, callback) {
 
 			// create url params
-			var param = gametitle.gametitle;
+			var param = gametitle.gamenameSlug;
 
 			// create post body properties
 			var body = {
@@ -190,11 +191,11 @@ var gamerepo = {
 						: callback(null, res.result);
 				});
 			});
-
 			httpreq.write(data);
 			httpreq.on('error', function(error) {
 				// Error handling here
-				console.log(error);
+				console.log("gamerepo" + error);
+				httpreq.end();
 			});
 			httpreq.end();
 
@@ -247,7 +248,7 @@ exports.submit = function(req, res) {
 			//				gamerepo_request.push({ timestamp : req.body.timestamp, gametitle : gamebundle_result.gamelist[i] });  *calvyn
 				gamerepo_request.push({
 				timestamp: req._startTime,
-				gametitle: gamebundle_result.gamelist[i].gametitle
+				gamenameSlug: gamebundle_result.gamelist[i].gamenameSlug
 			});
 
 			// Binding a context to an iterator
